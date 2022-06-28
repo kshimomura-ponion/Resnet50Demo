@@ -1,0 +1,45 @@
+name: Swift
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Import Provisioning Profile
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        touch ~/Library/MobileDevice/Provisioning\ Profiles/decoded.mobileprovision
+        echo -n '${{ secrets.PROVISIONING_PROFILE }}' | base64 -d -o ~/Library/MobileDevice/Provisioning\ Profiles/decoded.mobileprovision
+    - name: Import Code-Signing Certificates
+      uses: Apple-Actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.P12_BASE64 }}
+        p12-password: ${{ secrets.P12_PASSWORD }}
+   
+    - name: XCode Build Archive
+      uses: yukiarrr/ios-build-action@v1.1.1
+      with:
+          project-path: ios/Runner.xcodeproj
+          p12-base64: ${{ secrets.P12_BASE64 }}
+          certificate-password: ${{ secrets.P12_PASSWORD }}
+          mobileprovision-base64: ${{ secrets.PROVISIONING_PROFILE }}
+          code-signing-identity: "Apple Development"
+          team-id: ${{ secrets.TEAM_ID }}
+          workspace-path: ios/Runner.xcworkspace 
+          output-path: app-release.ipa
+          export-method: ad-hoc 
+    - name: Distribute iOS app
+      run: |
+          curl \
+            -H "Authorization: token ${{secrets.DEPLOY_GATE_API_KEY}}" \
+            -F "file=@/Users/runner/work/Build/Products/app-release.ipa" \
+            -F "message=　・ test upload" \ 
+            "https://deploygate.com/api/users/${{secrets.DEPLOY_GATE_USER_NAME}}/apps"
