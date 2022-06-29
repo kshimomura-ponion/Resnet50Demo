@@ -23,7 +23,7 @@ jobs:
       with:
           project-path: Resnet50Demo.xcodeproj
           p12-key-base64: ${{ secrets.P12_BASE64 }}
-          p12-key-password: ${{ secrets.P12_PASSWORD }}
+          certificate-password: ${{ secrets.P12_PASSWORD }}
           p12-cer-base64: ${{ secrets.P12_CER_BASE64 }}
           mobileprovision-base64: ${{ secrets.PROVISIONING_PROFILE }}
           code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
