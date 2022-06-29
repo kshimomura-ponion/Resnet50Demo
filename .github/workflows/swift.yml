@@ -33,8 +33,8 @@ jobs:
           export-method: development
     - name: Distribute iOS app
       run: |
-          curl \
-            -H "Authorization: token ${{secrets.DEPLOY_GATE_API_KEY}}" \
-            -F "file=@/Users/runner/work/Resnet50Demo/Resnet50Demo/app-debug.ipa" \
-            -F "message=　・ test upload" \ 
-            "https://deploygate.com/api/users/${{secrets.DEPLOY_GATE_USER_NAME}}/apps"
+        curl \
+        -H "Authorization: token ${{secrets.DEPLOY_GATE_API_KEY}}" \
+        -F "file=@/Users/runner/work/Resnet50Demo/Resnet50Demo/app-debug.ipa" \
+        -F "message=・アップロードテスト" \
+        "https://deploygate.com/api/users/${{secrets.DEPLOY_GATE_USER_NAME}}/apps"
