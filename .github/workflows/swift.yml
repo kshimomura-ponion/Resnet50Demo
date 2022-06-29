@@ -19,7 +19,7 @@ jobs:
       run: xcodebuild -version
    
     - name: XCode Build Archive
-      uses: yukiarrr/ios-build-action@v1.3.0
+      uses: yukiarrr/ios-build-action@v1.5.0
       with:
           project-path: Resnet50Demo.xcodeproj
           p12-key-base64: ${{ secrets.P12_BASE64 }}
