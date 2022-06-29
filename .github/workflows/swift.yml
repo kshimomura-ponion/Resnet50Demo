@@ -1,4 +1,4 @@
-name: Swift
+name: iOS CI/CD
 
 on:
   push:
@@ -13,6 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Select Xcode version 13.2.1
+      run: sudo xcode-select -s '/Applications/Xcode_13.2.1.app/Contents/Developer'
+    - name: Show Xcode version
+      run: xcodebuild -version
     - name: Import Provisioning Profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
@@ -32,9 +36,10 @@ jobs:
           certificate-password: ${{ secrets.P12_PASSWORD }}
           mobileprovision-base64: ${{ secrets.PROVISIONING_PROFILE }}
           code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
-          team-id: ${{ secrets.TEAM_ID }}  
+          team-id: ${{ secrets.TEAM_ID }}
+          configuration: Debug
           output-path: app-debug.ipa
-          export-method: ad-hoc 
+          export-method: ad-hoc
     - name: Distribute iOS app
       run: |
           curl \
