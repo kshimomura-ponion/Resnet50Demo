@@ -32,9 +32,10 @@ jobs:
           certificate-password: ${{ secrets.P12_PASSWORD }}
           mobileprovision-base64: ${{ secrets.PROVISIONING_PROFILE }}
           code-signing-identity: ${{ secrets.CODE_SIGNING_IDENTITY }}
-          team-id: ${{ secrets.TEAM_ID }}  
+          team-id: ${{ secrets.TEAM_ID }}
+          configuration: Debug
           output-path: app-debug.ipa
-          export-method: ad-hoc 
+          export-method: ad-hoc
     - name: Distribute iOS app
       run: |
           curl \
