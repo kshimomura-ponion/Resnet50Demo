@@ -30,7 +30,7 @@ jobs:
           team-id: ${{ secrets.TEAM_ID }}
           configuration: Debug
           output-path: app-debug.ipa
-          export-method: ad-hoc
+          export-method: development
     - name: Distribute iOS app
       run: |
           curl \
