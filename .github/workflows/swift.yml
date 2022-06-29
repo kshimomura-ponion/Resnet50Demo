@@ -1,4 +1,4 @@
-name: Swift
+name: iOS CI/CD
 
 on:
   push:
@@ -12,12 +12,24 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3 
+    - uses: actions/checkout@v3
     - name: Select Xcode version 13.2.1
       run: sudo xcode-select -s '/Applications/Xcode_13.2.1.app/Contents/Developer'
-
+    - name: Show Xcode version
+      run: xcodebuild -version
+    - name: Import Provisioning Profile
+      run: |
+        mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+        touch ~/Library/MobileDevice/Provisioning\ Profiles/decoded.mobileprovision
+        echo -n '${{ secrets.PROVISIONING_PROFILE }}' | base64 -d -o ~/Library/MobileDevice/Provisioning\ Profiles/decoded.mobileprovision
+    - name: Import Code-Signing Certificates
+      uses: Apple-Actions/import-codesign-certs@v1
+      with:
+        p12-file-base64: ${{ secrets.P12_BASE64 }}
+        p12-password: ${{ secrets.P12_PASSWORD }}
+   
     - name: XCode Build Archive
-      uses: yukiarrr/ios-build-action@v1.5.0
+      uses: yukiarrr/ios-build-action@v1.3.0
       with:
           project-path: Resnet50Demo.xcodeproj
           p12-base64: ${{ secrets.P12_BASE64 }}
